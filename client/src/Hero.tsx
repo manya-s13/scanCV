@@ -64,6 +64,10 @@ function Hero() {
     <div className='bg-gradient-to-b from-white via-blue-100 to-white min-h-screen w-full overflow-hidden'>
       
         <div className='text-black flex flex-col items-center justify-center py-40'>
+          <motion.div
+          initial={{opacity: 0, y:40}}
+          animate={{opacity: 1, y: 0}} >
+          
             <h1 className='text-4xl md:text-5xl text-center text-blue-500 font-semibold'>AI Resume Scanner</h1>
             <h1 className='text-4xl md:text-5xl text-center pb-10 font-semibold'>that actually gets you hired</h1>
             <p className='text-lg md:text-2xl text-center text-gray-600'>Get your resume scaned by our AI-powered resume scanner <br /> which provides instant feedback and helps you land more interviews</p>
@@ -78,6 +82,7 @@ function Hero() {
             onChange={handleFileUpload}
             className="hidden"
           />
+          </motion.div>
           <div className="mt-10">
         {isAnalyzing && (
           <div className="flex flex-col items-center justify-center py-20">
