@@ -38,7 +38,7 @@ const navigate = useNavigate();
 
       // alert(data.message || "Upload successful!");
 
-      const analysisRes = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
+      const analysisRes = await fetch('https://scancv.onrender.com/api/resume/analyze', {
         method: "POST",
         body: formData,
       });
