@@ -65,7 +65,7 @@ function Hero() {
       
         <div className='text-black flex flex-col items-center justify-center py-40'>
           <motion.div
-          initial={{opacity: 0, y:50}}
+          initial={{opacity: 0, y:40}}
           animate={{opacity: 1, y: 0}} >
           
             <h1 className='text-4xl md:text-5xl text-center text-blue-500 font-semibold'>AI Resume Scanner</h1>
