@@ -31,7 +31,7 @@ const navigate = useNavigate();
     formData.append("resume", file);
 
     try {
-      const res = await fetch("http://localhost:3001/api/resume/analyze", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
         method: "POST",
         body: formData,
       });
@@ -39,7 +39,7 @@ const navigate = useNavigate();
       const data = await res.json();
       // alert(data.message || "Upload successful!");
 
-      const analysisRes = await fetch("http://localhost:3001/api/resume/analyze", {
+      const analysisRes = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
         method: "POST",
         body: formData,
       });
