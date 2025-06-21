@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 interface ScoreData {
@@ -108,9 +107,38 @@ function Score({ shouldFetch, onFetchComplete }: ScoreProps) {
             </div>
             </div>
 
-            <hr className="mx-30 mt-10"></hr>
-            <h1 className="text-4xl px-30 py-10  font-semibold">Feedback</h1>
+            <hr className="mx-30 mt-10 mb-10"></hr>
             
+        <div className="px-30 mb-10 space-y-6 text-xl leading-relaxed">
+
+        <div>
+            <h2 className="text-3xl font-semibold text-blue-800 mb-2">Feedback</h2>
+            <ul className="list-disc list-inside text-gray-700">
+            {data.analysis.feedback.map((item, index) => (
+                <li key={`feedback-${index}`}>{item}</li>
+            ))}
+            </ul>
+        </div>
+
+        <div>
+            <h2 className="text-3xl font-semibold text-green-800 mb-2">Suggestions</h2>
+            <ul className="list-disc list-inside text-gray-700">
+            {data.analysis.suggestions.map((item, index) => (
+                <li key={`suggestion-${index}`}>{item}</li>
+            ))}
+            </ul>
+        </div>
+
+        <div>
+            <h2 className="text-3xl font-semibold text-red-700 mb-2">Improvements</h2>
+            <ul className="list-disc list-inside text-gray-700">
+            {data.analysis.improvements.map((item, index) => (
+                <li key={`improvement-${index}`}>{item}</li>
+            ))}
+            </ul>
+        </div>
+        </div>
+
         </div>
     );
 }

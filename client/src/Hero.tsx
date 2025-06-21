@@ -1,43 +1,71 @@
 import {Upload} from 'lucide-react'
-import {motion} from 'framer-motion'
-import { useRef } from 'react';
+import {motion, useScroll} from 'framer-motion'
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Hero() {
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
   
-    const handleFileSelect = () => {
-      if (fileInputRef.current) {
-        fileInputRef.current.click();
-      }
-    };
-  
-  
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      if (file.type !== "application/pdf") {
-        alert("Only PDF files are allowed.");
-        return;
-      }
-  
-      const formData = new FormData();
-      formData.append("resume", file);
-  
-      try {
-        const res = await fetch("http://localhost:3001/api/resume/upload", {
-          method: "POST",
-          body: formData,
-        });
-  
-        const data = await res.json();
-        alert(data.message || "Upload successful!");
-      } catch (err) {
-        console.error(err);
-        alert("Failed to upload.");
-      }
-    };
+  const navigate = useNavigate();
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  const handleFileSelect = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf") {
+      alert("Only PDF files are allowed.");
+      return;
+    }
+
+    setIsAnalyzing(true);
+
+    const formData = new FormData();
+    formData.append("resume", file);
+
+    try {
+      const res = await fetch("http://localhost:3001/api/resume/analyze", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      // alert(data.message || "Upload successful!");
+
+      const analysisRes = await fetch("http://localhost:3001/api/resume/analyze", {
+        method: "POST",
+        body: formData,
+      });
+      const analysisData = await analysisRes.json();
+      
+      if (analysisData.success) {
+        // Navigate to analysis page with the data
+        navigate('/analyze', { state: { analysisData: analysisData.data } });
+      } else {
+        alert("Failed to analyze resume.");
+        setIsAnalyzing(false);
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to analyze resume.");
+      setIsAnalyzing(false);
+    }
+  };
+
+  const handleFetchComplete = () => {
+    setShouldFetch(false); // stop further fetching
+  };
+    
   return (
     <div className='bg-gradient-to-b from-white via-blue-100 to-white min-h-screen w-full overflow-hidden'>
       
@@ -55,6 +83,15 @@ function Hero() {
             onChange={handleFileUpload}
             className="hidden"
           />
+          <div className="mt-10">
+        {isAnalyzing && (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mb-4"></div>
+            <h2 className="text-2xl font-semibold text-gray-700">Analyzing Resume...</h2>
+            <p className="text-gray-500 mt-2">Please wait while our AI analyzes your resume</p>
+          </div>
+        )}
+      </div>
             <motion.div
             initial={{opacity: 0, y:50}}
             animate={{opacity: 1, y:0}}
