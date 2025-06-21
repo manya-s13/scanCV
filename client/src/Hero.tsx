@@ -25,7 +25,7 @@ function Hero() {
       formData.append("resume", file);
   
       try {
-        const res = await fetch("http://localhost:5000/upload", {
+        const res = await fetch("http://localhost:3001/api/resume/upload", {
           method: "POST",
           body: formData,
         });

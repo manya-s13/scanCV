@@ -1,9 +1,15 @@
 import { Upload } from "lucide-react"
-import { useRef } from "react"
+import { useRef, useState } from "react"
+import Score from "./Score";
+import { useNavigate } from "react-router-dom";
+
 
 function DropCV() {
+const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const [analysisStarted, setAnalysisStarted] = useState(false);
 
   const handleFileSelect = () => {
     if (fileInputRef.current) {
@@ -24,17 +30,36 @@ function DropCV() {
     formData.append("resume", file);
 
     try {
-      const res = await fetch("http://localhost:5000/upload", {
+      const res = await fetch("http://localhost:3001/api/resume/upload", {
         method: "POST",
         body: formData,
       });
 
       const data = await res.json();
       alert(data.message || "Upload successful!");
+
+      const analysisRes = await fetch("http://localhost:3001/api/resume/analyze", {
+        method: "POST",
+        credentials: "include"
+      });
+      const analysisData = await analysisRes.json();
+      
+      if (analysisData.success) {
+        // store analysis somewhere (optional)
+        navigate('/analyze', { state: { analysisData } });
+
+      } else {
+        alert("Analysis failed. Try again.");
+      }
+
     } catch (err) {
       console.error(err);
       alert("Failed to upload.");
     }
+  };
+
+  const handleFetchComplete = () => {
+    setShouldFetch(false); // stop further fetching
   };
   
   return (
@@ -55,7 +80,13 @@ function DropCV() {
                 className="hidden"
               />
             </div>
+           
         </div>
+        <div className="mt-10">
+        {analysisStarted && (
+          <Score shouldFetch={shouldFetch} onFetchComplete={handleFetchComplete} />
+        )}
+      </div>
     </div>
   )
 }
