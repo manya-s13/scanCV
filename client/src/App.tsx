@@ -27,7 +27,7 @@ function App() {
       />
       
       {/* Analysis page */}
-      <Route path="/analyze" element={<Score shouldFetch={true} onFetchComplete={() => {}} />} />
+      <Route path="/analyze" element={<Score shouldFetch={false} onFetchComplete={() => {}} />} />
     </Routes>
   </BrowserRouter>
   )

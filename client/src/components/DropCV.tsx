@@ -9,7 +9,7 @@ const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [shouldFetch, setShouldFetch] = useState(false);
-  const [analysisStarted, setAnalysisStarted] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleFileSelect = () => {
     if (fileInputRef.current) {
@@ -26,35 +26,38 @@ const navigate = useNavigate();
       return;
     }
 
+    setIsAnalyzing(true);
+
     const formData = new FormData();
     formData.append("resume", file);
 
     try {
-      const res = await fetch("http://localhost:3001/api/resume/upload", {
+      const res = await fetch("http://localhost:3001/api/resume/analyze", {
         method: "POST",
         body: formData,
       });
 
       const data = await res.json();
-      alert(data.message || "Upload successful!");
+      // alert(data.message || "Upload successful!");
 
       const analysisRes = await fetch("http://localhost:3001/api/resume/analyze", {
         method: "POST",
-        credentials: "include"
+        body: formData,
       });
       const analysisData = await analysisRes.json();
       
       if (analysisData.success) {
-        // store analysis somewhere (optional)
-        navigate('/analyze', { state: { analysisData } });
-
+        // Navigate to analysis page with the data
+        navigate('/analyze', { state: { analysisData: analysisData.data } });
       } else {
-        alert("Analysis failed. Try again.");
+        alert("Failed to analyze resume.");
+        setIsAnalyzing(false);
       }
 
     } catch (err) {
       console.error(err);
-      alert("Failed to upload.");
+      alert("Failed to analyze resume.");
+      setIsAnalyzing(false);
     }
   };
 
@@ -82,9 +85,13 @@ const navigate = useNavigate();
             </div>
            
         </div>
-        <div className="mt-10">
-        {analysisStarted && (
-          <Score shouldFetch={shouldFetch} onFetchComplete={handleFetchComplete} />
+        <div className="mt-10 bg-black/30">
+        {isAnalyzing && (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mb-4"></div>
+            <h2 className="text-2xl font-semibold text-gray-700">Analyzing Resume...</h2>
+            <p className="text-gray-500 mt-2">Please wait while our AI analyzes your resume</p>
+          </div>
         )}
       </div>
     </div>

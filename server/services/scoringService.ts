@@ -51,30 +51,51 @@ export const calculateResumeScore = async (
 };
 
 // ATS Compatibility Score (0-100)
+
 const calculateATSCompatibility = (text: string): number => {
-  let score = 100;
+  let score = 70; // Start with a more realistic base score
+  const lowerText = text.toLowerCase();
+  
+  // Check for essential sections (more specific patterns)
+  const hasContactInfo = /email|phone|@|contact|linkedin/i.test(text);
+  const hasExperienceSection = /\b(experience|work history|employment|professional experience)\b/i.test(text);
+  const hasSkillsSection = /\b(skills|technical skills|competencies|technologies)\b/i.test(text);
+  const hasEducation = /\b(education|degree|university|college|bachelor|master|phd)\b/i.test(text);
+  
+  // Award points for having essential sections
+  if (hasContactInfo) score += 10;
+  if (hasExperienceSection) score += 15;
+  if (hasSkillsSection) score += 10;
+  if (hasEducation) score += 5;
   
   // Deduct points for ATS-unfriendly elements
-  if (text.includes('│') || text.includes('─') || text.includes('┌')) {
-    score -= 20; // Special characters/tables
+  if (text.includes('│') || text.includes('─') || text.includes('┌') || text.includes('┐')) {
+    score -= 15; // Tables and special formatting
   }
   
-  if (text.length < 500) {
-    score -= 30; // Too short
+  // Check for images or graphics indicators
+  if (text.includes('image') || text.includes('graphic') || text.includes('chart')) {
+    score -= 10;
   }
   
-  if (text.length > 5000) {
-    score -= 10; // Too long
+  // Length checks (more reasonable)
+  if (text.length < 300) {
+    score -= 20; // Too short
+  } else if (text.length < 800) {
+    score -= 5; // Slightly short
   }
   
-  // Check for standard sections
-  const hasContactInfo = /email|phone|@/.test(text.toLowerCase());
-  const hasExperience = /experience|work|employment|job/.test(text.toLowerCase());
-  const hasSkills = /skills|technical|technologies/.test(text.toLowerCase());
+  if (text.length > 7000) {
+    score -= 15; // Too long
+  }
   
-  if (!hasContactInfo) score -= 25;
-  if (!hasExperience) score -= 25;
-  if (!hasSkills) score -= 15;
+  // Check for proper formatting indicators
+  const hasBulletPoints = /[•\-\*]/.test(text);
+  if (hasBulletPoints) score += 5;
+  
+  // Check for dates (indicates timeline)
+  const hasDatePatterns = /\d{4}|\d{1,2}\/\d{4}|present|current/gi.test(text);
+  if (hasDatePatterns) score += 5;
   
   return Math.max(0, Math.min(100, score));
 };
@@ -190,35 +211,60 @@ const calculateContentScore = (text: string): number => {
 
 // Calculate experience score
 const calculateExperienceScore = (text: string): number => {
-  let score = 50;
+  let score = 0; // Start with 0 instead of 50
+  const lowerText = text.toLowerCase();
   
-  // Look for date patterns (experience timeline)
-  const datePatterns = text.match(/\d{4}|\d{1,2}\/\d{4}|present|current/gi);
-  if (datePatterns && datePatterns.length >= 2) {
-    score += 25;
+  // Check for experience section headers
+  const experienceHeaders = /experience|work history|professional experience/gi;
+  const hasExperienceSection = experienceHeaders.test(text);
+  
+  if (!hasExperienceSection) {
+    return 10; // Very low score if no experience section found
   }
   
-  // Look for company/organization names (usually capitalized)
-  const companies = text.match(/[A-Z][a-z]+ [A-Z][a-z]+|[A-Z][a-z]+ Inc|[A-Z][a-z]+ LLC/g);
-  if (companies && companies.length > 0) {
-    score += Math.min(25, companies.length * 8);
+  score += 30; // Base score for having experience section
+  
+  // Look for date patterns (experience timeline) - need at least 2 dates for employment period
+  const datePatterns = text.match(/\d{4}|\d{1,2}\/\d{4}|present|current|ongoing/gi);
+  if (datePatterns && datePatterns.length >= 2) {
+    score += 20;
+  }
+  
+  // Look for job titles (common patterns)
+  const jobTitles = lowerText.match(/engineer|developer|manager|analyst|specialist|coordinator|director|lead|senior|junior|intern/g);
+  if (jobTitles && jobTitles.length > 0) {
+    score += Math.min(20, jobTitles.length * 5);
+  }
+  
+  // Look for company indicators
+  const companyIndicators = text.match(/[A-Z][a-z]+ [A-Z][a-z]+|Inc\.|LLC|Corp|Ltd|Company|Technologies|Solutions/g);
+  if (companyIndicators && companyIndicators.length > 0) {
+    score += Math.min(15, companyIndicators.length * 3);
+  }
+  
+  // Look for responsibility indicators
+  const responsibilities = lowerText.match(/responsible for|managed|led|developed|created|implemented|achieved|collaborated/g);
+  if (responsibilities && responsibilities.length > 0) {
+    score += Math.min(15, responsibilities.length * 2);
   }
   
   return Math.max(0, Math.min(100, score));
-};
+}
 
 // Calculate skills score
 const calculateSkillsScore = (text: string): number => {
   const commonSkills = [
     'programming', 'software', 'technical', 'computer', 'digital',
-    'analytical', 'communication', 'leadership', 'management'
+    'analytical', 'communication', 'leadership', 'management',  'javascript', 'python', 'react', 'leadership', 'management',
+    'team', 'git', 'aws', 'docker', 'java', 'c', 'python', 'lead', 'critical thinking', 'cloud', 'communication',
+    'collanoration', 'meeting deadlines', 'troubleshooting', 'teamwork', 'agility', 'optimized', 'coordinated'
   ];
   
   const skillCount = commonSkills.filter(skill => 
     text.toLowerCase().includes(skill)
   ).length;
   
-  return Math.min(100, skillCount * 12);
+  return Math.min(100, skillCount * 5);
 };
 
 // Helper function to determine keyword importance
