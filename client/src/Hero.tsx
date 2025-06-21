@@ -1,5 +1,5 @@
 import {Upload} from 'lucide-react'
-import {motion, useScroll} from 'framer-motion'
+import {motion} from 'framer-motion'
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import dotenv from 'dotenv';
@@ -12,7 +12,6 @@ function Hero() {
   const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [shouldFetch, setShouldFetch] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleFileSelect = () => {
@@ -36,12 +35,11 @@ function Hero() {
     formData.append("resume", file);
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
-        method: "POST",
-        body: formData,
-      });
+      // const res = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
+      //   method: "POST",
+      //   body: formData,
+      // });
 
-      const data = await res.json();
       // alert(data.message || "Upload successful!");
 
       const analysisRes = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
@@ -63,10 +61,6 @@ function Hero() {
       alert("Failed to analyze resume.");
       setIsAnalyzing(false);
     }
-  };
-
-  const handleFetchComplete = () => {
-    setShouldFetch(false); // stop further fetching
   };
     
   return (

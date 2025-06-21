@@ -7,7 +7,7 @@ function DropCV() {
 const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [shouldFetch, setShouldFetch] = useState(false);
+  // const [shouldFetch, setShouldFetch] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleFileSelect = () => {
@@ -31,12 +31,11 @@ const navigate = useNavigate();
     formData.append("resume", file);
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
-        method: "POST",
-        body: formData,
-      });
+      // const res = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
+      //   method: "POST",
+      //   body: formData,
+      // });
 
-      const data = await res.json();
       // alert(data.message || "Upload successful!");
 
       const analysisRes = await fetch(`${process.env.REACT_APP_API_URL}/api/resume/analyze`, {
@@ -58,10 +57,6 @@ const navigate = useNavigate();
       alert("Failed to analyze resume.");
       setIsAnalyzing(false);
     }
-  };
-
-  const handleFetchComplete = () => {
-    setShouldFetch(false); // stop further fetching
   };
   
   return (
