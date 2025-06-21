@@ -71,7 +71,7 @@ function Hero() {
             <h1 className='text-4xl md:text-5xl text-center text-blue-500 font-semibold'>AI Resume Scanner</h1>
             <h1 className='text-4xl md:text-5xl text-center pb-10 font-semibold'>that actually gets you hired</h1>
             <p className='text-lg md:text-2xl text-center text-gray-600'>Get your resume scaned by our AI-powered resume scanner <br /> which provides instant feedback and helps you land more interviews</p>
-            <button onClick={handleFileSelect} className='flex items-center gap-4 cursor-pointer mt-20 px-6 py-4 rounded-xl bg-blue-400 text-xl hover:bg-blue-500 hover:text-white'>
+            <button onClick={handleFileSelect} className='flex justify-center items-center gap-4 cursor-pointer mt-20 px-6 py-4 rounded-xl bg-blue-400 text-xl hover:bg-blue-500 hover:text-white mx-auto'>
               <Upload />
                 Upload Resume
             </button>
