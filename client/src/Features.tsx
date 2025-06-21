@@ -12,7 +12,7 @@ function Features() {
         {
             icon: <Check className='w-10 h-10'/>,
             title: "ATS Compability",
-            desc: "Ensure your resume passes throught Applicant Tracking System"
+            desc: "Ensure your resume passes throught ATS"
         },
         {
             icon: <ChartNoAxesCombined className='w-10 h-10' />,
@@ -31,7 +31,7 @@ function Features() {
        
         
       
-        <div className="grid grid-cols-1 md:grid-cols-3 mt-16 px-36 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 mt-16 px-24 gap-6">
 
             {cards.map((card, i)=>(
                  <motion.div
@@ -39,7 +39,7 @@ function Features() {
                  whileInView={{opacity:1 , y: 0}}
                  transition={{ duration: 1, delay: i * 0.2 }}
                  viewport={{ once: true }} >
-                <div className="p-14 border border-gray-300 rounded-xl flex flex-col items-start gap-2 hover:scale-105">
+                <div className="p-10 border border-gray-300 rounded-xl flex flex-col items-start gap-2 hover:scale-105">
                     
                     <h3 className='flex items-center text-2xl text-black font-semibold gap-6' >{card.icon} {card.title}</h3>
                     <p className='text-xl text-gray-500' >{card.desc}</p>

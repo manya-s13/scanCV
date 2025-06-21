@@ -9,7 +9,7 @@ function Footer() {
                 <h1 className='text-3xl font-semibold text-black pb-5'>ScanCV</h1>
                 <p className='text-xl text-gray-600'>AI-Powered Resume Scanner to help you enhance your resume</p>
             </div>
-            <div className='flex gap-8 p-20 pl-200'>
+            <div className='flex gap-8 p-20 pl-100'>
             <a href='https://linkedin.com/in/manyas13' ><Linkedin className='w-10 h-10 hover:text-blue-600 cursor-pointer' /></a>
             <a href='https://github.com/manya-s13'> <Github  className='w-10 h-10 hover:text-blue-600 cursor-pointer' /></a>
             <a href='https://x.com/cinamonn_girll'><Twitter  className='w-10 h-10 hover:text-blue-600 cursor-pointer' /></a>

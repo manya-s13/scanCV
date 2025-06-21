@@ -63,10 +63,11 @@ function Hero() {
   return (
     <div className='bg-gradient-to-b from-white via-blue-100 to-white min-h-screen w-full overflow-hidden'>
       
-        <div className='text-black flex flex-col items-center justify-center py-60'>
-            <h1 className='text-7xl text-center pb-10 font-semibold'>See How Your Resume Stands <br /> Before You Apply.</h1>
-            <p className='text-2xl text-center text-gray-600'>Get your resume scaned by our AI-powered resume scanner <br /> which provides instant feedback and helps you land more interviews</p>
-            <button onClick={handleFileSelect} className='flex items-center gap-4 cursor-pointer mt-20 px-12 py-4 rounded-xl bg-blue-400 text-2xl hover:bg-blue-500 hover:text-white'>
+        <div className='text-black flex flex-col items-center justify-center py-40'>
+            <h1 className='text-4xl md:text-5xl text-center text-blue-500 font-semibold'>AI Resume Scanner</h1>
+            <h1 className='text-4xl md:text-5xl text-center pb-10 font-semibold'>that actually gets you hired</h1>
+            <p className='text-lg md:text-2xl text-center text-gray-600'>Get your resume scaned by our AI-powered resume scanner <br /> which provides instant feedback and helps you land more interviews</p>
+            <button onClick={handleFileSelect} className='flex items-center gap-4 cursor-pointer mt-20 px-6 py-4 rounded-xl bg-blue-400 text-xl hover:bg-blue-500 hover:text-white'>
               <Upload />
                 Upload Resume
             </button>
@@ -86,21 +87,6 @@ function Hero() {
           </div>
         )}
       </div>
-            <motion.div
-            initial={{opacity: 0, y:50}}
-            animate={{opacity: 1, y:0}}
-             >
-            <div className='flex justify-center text-center gap-40 pt-30'>
-          <div className=''>
-            <h1 className='text-5xl text-blue-600 font-semibold'>99%</h1>
-            <p className='text-xl'>Accuracy</p>
-          </div>
-          <div>
-            <h1 className='text-5xl text-blue-600 font-semibold'>24/7</h1>
-            <p className='text-xl'>Analysis</p>
-          </div>
-        </div>
-            </motion.div>
         </div>
     </div>
     
