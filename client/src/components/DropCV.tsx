@@ -2,9 +2,6 @@ import { Upload } from "lucide-react"
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 function DropCV() {
 const navigate = useNavigate();
